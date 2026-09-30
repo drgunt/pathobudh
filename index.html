@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PathoLIS · โรงพยาบาลพุทธชินราช พิษณุโลก</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1c2733;--mute:#66758a;--line:#dde3ea;--pri:#0b6e4f;--pri2:#e6f4ee;--warn:#b45309;--warn2:#fff4e0;--bad:#b42318;--bad2:#fdecea;--blue:#1d4ed8;--blue2:#e8efff}
+@media (prefers-color-scheme:dark){:root{--bg:#10161d;--card:#182029;--ink:#e6edf3;--mute:#93a1b3;--line:#2a3541;--pri:#3ecf9a;--pri2:#12332a;--warn:#f5b04c;--warn2:#3a2b12;--bad:#ff8a80;--bad2:#3b1a17;--blue:#8fb0ff;--blue2:#1a2745}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Sarabun,system-ui,sans-serif}
+header{background:var(--pri);color:#fff;padding:10px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;font-weight:700}
+header small{opacity:.85;display:block;font-weight:400;font-size:12px}
+nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav a{color:#fff;text-decoration:none;padding:6px 12px;border-radius:8px;font-size:14px;opacity:.9}
+nav a.on,nav a:hover{background:rgba(255,255,255,.2);opacity:1}
+header input{background:rgba(255,255,255,.18);border:0;color:#fff;padding:5px 10px;border-radius:8px;width:150px}
+main{max-width:1200px;margin:0 auto;padding:20px}
+h2{margin:0 0 12px;font-size:20px}h3{margin:0 0 8px;font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:2px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:64px;resize:vertical}
+input[type=radio],input[type=checkbox]{width:auto}
+.inl label{display:inline-flex;gap:5px;align-items:center;color:var(--ink);margin-right:14px;font-size:14px}
+button,.btn{background:var(--pri);color:#fff;border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit;font-weight:600;text-decoration:none;display:inline-block}
+button.sec{background:var(--pri2);color:var(--pri)}button.warn{background:var(--warn2);color:var(--warn)}button.bad{background:var(--bad2);color:var(--bad)}
+button.sm{padding:3px 9px;font-size:13px}button:disabled{opacity:.45;cursor:not-allowed}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}th{color:var(--mute);font-weight:600;font-size:13px}
+tr.click{cursor:pointer}tr.click:hover{background:var(--pri2)}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--blue2);color:var(--blue)}
+.chip.draft{background:var(--warn2);color:var(--warn)}.chip.signed,.chip.sent{background:var(--pri2);color:var(--pri)}.chip.reading{background:var(--warn2);color:var(--warn)}
+.tabs{display:flex;gap:2px;flex-wrap:wrap;border-bottom:2px solid var(--line);margin-bottom:16px}
+.tabs a{padding:8px 14px;text-decoration:none;color:var(--mute);font-weight:600;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs a.on{color:var(--pri);border-color:var(--pri)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer}.stat b{font-size:24px;display:block}.stat span{color:var(--mute);font-size:13px}
+.th{width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--line);cursor:zoom-in}
+.strip{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.strip .w{position:relative}.strip .w b{position:absolute;top:-6px;right:-6px;background:var(--bad);color:#fff;border-radius:50%;width:20px;height:20px;text-align:center;font-size:13px;line-height:20px;cursor:pointer}
+.note{background:var(--warn2);color:var(--warn);padding:8px 12px;border-radius:8px;font-size:13px;margin:8px 0}
+.ok{background:var(--pri2);color:var(--pri);padding:8px 12px;border-radius:8px;font-size:13px;margin:8px 0}
+.mute{color:var(--mute);font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tl{border-left:3px solid var(--line);margin-left:6px;padding-left:14px}.tl div{margin-bottom:8px;font-size:14px}
+pre{background:var(--bg);border:1px solid var(--line);padding:10px;border-radius:8px;overflow:auto;font-size:12px;max-height:340px}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50}#lb img{max-width:94vw;max-height:94vh}
+#print{display:none}
+.stk{display:inline-flex;gap:6px;align-items:center;border:1px dashed #888;padding:4px 6px;margin:3px;width:62mm;height:32mm;overflow:hidden;color:#000;background:#fff;font-size:11px;line-height:1.25;page-break-inside:avoid}
+.stk img{width:24mm;height:24mm;flex:none}.stk>div{flex:1;min-width:0;text-align:left;overflow-wrap:anywhere}.stk b{font-size:13px}.stk .nw{white-space:nowrap}@page{margin:6mm}
+.rep{color:#000;background:#fff;font-size:13px;padding:6mm}.rep h1{font-size:18px;text-align:center;margin:0}.rep h4{margin:10px 0 2px}.rep p{margin:2px 0;white-space:pre-wrap}
+@media print{body{background:#fff}header,main,#lb{display:none!important}#print{display:block!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>PathoLIS<small>ห้องปฏิบัติการพยาธิวิทยา รพ.พุทธชินราช พิษณุโลก</small></h1>
+  <nav id="nav"></nav>
+  <span id="who"></span><input id="user" placeholder="ผู้ใช้งาน" title="ชื่อผู้ปฏิบัติงาน (ใช้บันทึกใน log)">
+</header>
+<main id="app"></main>
+<div id="lb"><img alt=""></div>
+<div id="print"></div>
+
+<script>
+/* ============ พื้นฐาน / ฐานข้อมูล (IndexedDB ในเบราว์เซอร์ — ต้นแบบ) ============ */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const now=()=>Date.now();
+const pad=(n,l)=>String(n).padStart(l,'0');
+const fmtT=t=>t?new Date(t).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}):'';
+const fmtD=d=>d?new Date(d).toLocaleDateString('th-TH',{dateStyle:'medium'}):'';
+const yy=()=>String(new Date().getFullYear()+543).slice(-2);
+
+const idb={open(){return new Promise((res,rej)=>{const r=indexedDB.open('patholis',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
+  async get(k){const d=await this.open();return new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>r(q.result)})},
+  async set(k,v){const d=await this.open();return new Promise(r=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>r()})}};
+const DOCTORS=[['3601200037692','นายอภิชาติ ชุมทอง'],['3659900294008','นางสาวปฏิมา บุญโญ'],['3190200325586','นายอรรณพ นาคะปัท'],['3710900612710','นายยิ่งยศ จุลกิจวัฒน์'],['1659900195003','นางสาวจินตนา วังสถิตธรรม'],['1640600163531','นายมานะ เมืองเอี่ยม'],['1559900047790','นางสาวชญาณิศวร์ มงคลวิสุทธิ์']].map(([id,name])=>({id,name}));
+const DEMO_PASSWORD='1234'; // ต้นแบบเท่านั้น — ระบบจริงต้องตรวจรหัสผ่านที่ server และเก็บแบบ hash
+let db={seq:{},lab:{},cases:[],user:'',session:null,settings:{doctors:DOCTORS,hisPullUrl:'',hisResultUrl:'',aiEndpoint:''}};
+let st;const save=()=>{clearTimeout(st);st=setTimeout(()=>idb.set('db',db).catch(()=>{}),150)};
+
+const STATUS={draft:'รอลงทะเบียน',registered:'รับเคสแล้ว',grossed:'ตัดชิ้นเนื้อแล้ว',processing:'กำลังประมวลผล',ready:'พร้อมอ่าน',reading:'แพทย์กำลังอ่าน',signed:'อนุมัติผลแล้ว',sent:'ส่งเข้า HIS แล้ว'};
+const STEPS=[['grossing','ตัดชิ้นเนื้อ (Grossing)'],['fixation','ดองน้ำยา (Fixation)'],['processing','Tissue processing'],['embedding','หล่อบล็อกพาราฟิน'],['cutting','ตัดสไลด์'],['staining','ย้อม H&E'],['coverslip','ปิดกระจก'],['qc','QC & ส่งแพทย์']];
+const stepName=k=>(STEPS.find(s=>s[0]===k)||[0,k])[1];
+const RTYPES=['Patho ทั่วไป','Screening colonoscope','PAP smear','Appendix','Cone / LEEP','อื่นๆ'];
+const PROCS=['Needle biopsy','Punch biopsy','Incision','Excision','Cone / LEEP','Necropsy','Other'];
+const STAINS=['IHC (Immunohistochemistry)','Wright','Oppitz','AFB','Modified AFB','PAS','GMS','Masson trichrome','Congo red','อื่นๆ'];
+const COLORS=['ฟ้า','ขาว','ชมพู','เหลือง','เขียว','ส้ม'];
+const DEMO_HIS=[
+ {hn:'6812345',fname:'สมชาย',lname:'ใจดี',dob:'1962-03-14',sex:'ช',ward:'อายุรกรรมชาย 1',doctor:'นพ.ประเสริฐ ศัลยกร',history:'ถ่ายเป็นเลือดสด 2 เดือน น้ำหนักลด 5 กก.',exam:'ซีดเล็กน้อย, PR: mass 5 cm from anal verge',radiology:'CT abdomen: wall thickening rectosigmoid',provisional:'Rectal cancer'},
+ {hn:'6923456',fname:'สมหญิง',lname:'รักดี',dob:'1988-07-21',sex:'ญ',ward:'OPD สูติ-นรีเวช',doctor:'พญ.มาลี นรีเวช',history:'มาตรวจคัดกรองมะเร็งปากมดลูก',exam:'ปากมดลูกเรียบ ไม่มีแผล',radiology:'',provisional:'Screening'},
+ {hn:'7034567',fname:'วิชัย',lname:'มั่นคง',dob:'1995-11-02',sex:'ช',ward:'ศัลยกรรมชาย',doctor:'นพ.สุรชัย ศัลยกร',history:'ปวดท้องด้านขวาล่าง 1 วัน ไข้ต่ำ',exam:'RLQ tenderness, rebound +',radiology:'US: non-compressible tubular structure',provisional:'Acute appendicitis'}];
+
+/* ============ รูปภาพ / AI ============ */
+function loadImg(src){return new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=src})}
+async function compress(file,max=1280){const i=await loadImg(URL.createObjectURL(file));const k=Math.min(1,max/Math.max(i.width,i.height));const c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.75)}
+function pickFiles(multi=true){return new Promise(res=>{const f=document.createElement('input');f.type='file';f.accept='image/*';f.multiple=multi;f.onchange=async()=>res(await Promise.all([...f.files].map(x=>compress(x))));f.click()})}
+async function decodeQR(src){ // BarcodeDetector ถ้ามี ไม่งั้นใช้ jsQR (ทำงานได้ทุกเบราว์เซอร์)
+  const im=await loadImg(src);
+  try{if('BarcodeDetector' in window){const r=await new BarcodeDetector({formats:['qr_code']}).detect(im);if(r[0])return r[0].rawValue}}catch{}
+  if(!window.jsQR)return '';
+  for(const k of [1,.6,.35]){const w=Math.max(1,Math.round(im.width*k)),h=Math.max(1,Math.round(im.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(im,0,0,w,h);
+    const q=jsQR(x.getImageData(0,0,w,h).data,w,h,{inversionAttempts:'attemptBoth'});if(q&&q.data)return q.data}
+  return '';
+}
+/* สแกน QR สดจากกล้อง (ต้องเปิดผ่าน https หรือ localhost) แล้วเก็บเฟรมตอนอ่านได้เป็นรูปงาน */
+const Cam={stream:null,timer:0,el:null,
+  async open(onHit){
+    if(!navigator.mediaDevices?.getUserMedia)return alert('เบราว์เซอร์/การเชื่อมต่อนี้ใช้กล้องไม่ได้ (ต้องใช้ https หรือ localhost) — ใช้ปุ่มถ่ายรูปแทน');
+    try{this.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280}},audio:false})}catch(e){return alert('เปิดกล้องไม่ได้: '+e.message)}
+    const o=this.el=document.createElement('div');o.style.cssText='position:fixed;inset:0;background:#000;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px';
+    o.innerHTML='<video playsinline muted style="max-width:96vw;max-height:78vh;border-radius:12px"></video><div style="color:#fff">เล็งกล้องไปที่ QR บนสติกเกอร์ — เมื่ออ่านได้ระบบจะเก็บภาพให้อัตโนมัติ</div><button class="bad">ปิดกล้อง</button>';
+    document.body.appendChild(o);const v=$('video',o);v.srcObject=this.stream;await v.play();$('button',o).onclick=()=>this.close();
+    const det='BarcodeDetector' in window?new BarcodeDetector({formats:['qr_code']}):null,cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true});
+    const tick=async()=>{if(!this.el)return;try{
+      if(v.videoWidth){const k=Math.min(1,640/v.videoWidth);cv.width=v.videoWidth*k;cv.height=v.videoHeight*k;cx.drawImage(v,0,0,cv.width,cv.height);
+        let txt='';if(det){const r=await det.detect(cv);txt=r[0]?.rawValue||''}
+        if(!txt&&window.jsQR){const q=jsQR(cx.getImageData(0,0,cv.width,cv.height).data,cv.width,cv.height,{inversionAttempts:'attemptBoth'});txt=q?.data||''}
+        if(txt){const f=document.createElement('canvas');f.width=v.videoWidth;f.height=v.videoHeight;f.getContext('2d').drawImage(v,0,0);const img=f.toDataURL('image/jpeg',.8);this.close();onHit(txt,img);return}}
+    }catch{}this.timer=setTimeout(tick,180)};tick();
+  },
+  close(){clearTimeout(this.timer);this.stream?.getTracks().forEach(t=>t.stop());this.stream=null;this.el?.remove();this.el=null}
+};
+/* วิเคราะห์ภาพชิ้นเนื้อเบื้องต้นในเครื่อง: นับก้อน + สีเด่น (ประมาณการ ต้องตรวจสอบโดยผู้ปฏิบัติงาน) */
+async function analyzeImage(src){
+  const im=await loadImg(src),W=260,H=Math.max(1,Math.round(W*im.height/im.width)),c=document.createElement('canvas');c.width=W;c.height=H;
+  const x=c.getContext('2d');x.drawImage(im,0,0,W,H);const d=x.getImageData(0,0,W,H).data;
+  const bs=[];for(let i=0;i<W;i++){bs.push([0,i],[H-1,i])}for(let j=0;j<H;j++){bs.push([j,0],[j,W-1])}
+  const med=k=>{const a=bs.map(([y,xx])=>d[(y*W+xx)*4+k]).sort((p,q)=>p-q);return a[a.length>>1]};
+  const bg=[med(0),med(1),med(2)],mask=new Uint8Array(W*H);
+  for(let p=0;p<W*H;p++)mask[p]=(Math.abs(d[p*4]-bg[0])+Math.abs(d[p*4+1]-bg[1])+Math.abs(d[p*4+2]-bg[2]))>90?1:0;
+  const seen=new Uint8Array(W*H);let blobs=0,R=0,G=0,B=0,N=0;
+  for(let s=0;s<W*H;s++){if(!mask[s]||seen[s])continue;const q=[s];seen[s]=1;let a=0,r=0,g=0,b=0;
+    while(q.length){const p=q.pop();a++;r+=d[p*4];g+=d[p*4+1];b+=d[p*4+2];const px=p%W,py=(p/W)|0;
+      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=px+dx,ny=py+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const n=ny*W+nx;if(mask[n]&&!seen[n]){seen[n]=1;q.push(n)}}}
+    if(a>=W*H*.004){blobs++;R+=r;G+=g;B+=b;N+=a}}
+  if(!N)return {pieces:0,color:''};
+  const r=R/N/255,g=G/N/255,b=B/N/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),v=mx,s=mx?(mx-mn)/mx:0;
+  let h=0;if(mx!==mn){h=mx===r?((g-b)/(mx-mn))%6:mx===g?(b-r)/(mx-mn)+2:(r-g)/(mx-mn)+4;h=(h*60+360)%360}
+  let color=v<.2?'black':s<.15?(v>.75?'white':'gray'):(h<15||h>345)?(v<.4?'dark-brown':'pink-red'):h<45?(v<.45?'dark-brown':v<.7?'brown':'tan'):h<70?'yellow-tan':'gray';
+  return {pieces:blobs,color};
+}
+const AI={
+  async call(kind,payload){ // ต่อ Vision/LLM จริงผ่าน endpoint ของโรงพยาบาลเอง (ไม่ฝัง API key ในหน้าเว็บ)
+    const u=db.settings.aiEndpoint;if(!u)return null;
+    const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind,...payload})});
+    return (await r.json()).text||null;
+  }
+};
+const composeGross=g=>`${g.pieces||1} ${(g.pieces||1)>1?'masses of tissue':'mass of tissue'}, ${g.shape||'irregular shape'}, with ${g.color||'dark-brown'} color${g.size?`, aggregating ${g.size}`:''}.`;
+
+/* ============ ข้อมูลเคส ============ */
+const getCase=id=>db.cases.find(c=>c.id===id);
+const cur=()=>getCase(route().id);
+const who=()=>db.session?.name||db.user||'—';
+const docNames=()=>db.settings.doctors.map(d=>d.name);
+const log=(c,text,extra={})=>{c.events.push({ts:now(),text,by:who(),...extra});save()};
+const cname=c=>`${c.patient.fname||''} ${c.patient.lname||''}`.trim();
+const ctLabel=ct=>`${ct.type} ${ct.n}`;
+const ctFull=(c,ct)=>`${c.sNo||'(ยังไม่ลงทะเบียน)'} ${ctLabel(ct)}`;
+const getPath=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
+const setPath=(o,p,v)=>{const k=p.split('.'),l=k.pop();const t=k.reduce((a,x)=>a[x]??(a[x]={}),o);t[l]=v};
+function refresh(c){ // คำนวณสถานะเคสจากบล็อก/รายงาน
+  if(c.status==='draft'||c.status==='signed'||c.status==='sent')return;
+  if(!c.blocks.length)c.status='registered';
+  else if(c.blocks.every(b=>b.step==='qc'))c.status=(c.reading?'reading':'ready');
+  else if(c.blocks.some(b=>b.step!=='grossing'))c.status='processing';
+  else c.status='grossed';
+}
+const pendingOrders=c=>c.orders.filter(o=>o.status!=='done');
+
+/* ============ Router ============ */
+function route(){const p=location.hash.replace(/^#\/?/,'').split('/');return {page:p[0]||'cases',id:p[1],tab:p[2]||'reception'}}
+const go=h=>{location.hash=h};
+function render(){
+  const r=route(),V={orders:vOrders,report:vRepQ,cases:vCases,request:vReq,reception:vRecQ,login:vLogin,new:vNew,case:vCase,gross:vGrossQ,scan:vScan,worklist:vWork,his:vHis,settings:vSet}[r.page]||vCases;
+  const TABNAV={request:'request',reception:'reception',gross:'gross',process:'scan',review:'worklist',order:'orders',report:'report',his:'his'};
+  const cur_=r.page==='case'?TABNAV[r.tab]:r.page==='new'?'request':r.page;
+  $('#nav').innerHTML=[['cases','Dashboard'],['request','1 ใบคำขอ'],['reception','2 รับใบและสิ่งส่งตรวจ'],['gross','3 ตัดชิ้นเนื้อ/บล็อก'],['scan','4 Process'],['worklist','5 แพทย์อ่าน'],['orders','6 สั่งเพิ่ม'],['report','7 รายงานผล'],['his','8 ส่ง HIS'],['settings','ตั้งค่า']]
+    .map(([k,t])=>`<a href="#/${k}" class="${cur_===k?'on':''}">${t}</a>`).join('');
+  $('#who').innerHTML=db.session?`👤 ${esc(db.session.name)} <a href="#/login" data-act="logout" style="color:#fff">ออก</a>`:'<a href="#/login" style="color:#fff">เข้าสู่ระบบแพทย์</a>';$('#user').style.display=db.session?'none':'';
+  $('#app').innerHTML=V(r);hydrate();window.scrollTo(0,0);
+}
+function hydrate(){
+  $$('[data-qr]').forEach(e=>{try{const q=qrcode(0,'M');q.addData(e.dataset.qr);q.make();e.src=q.createDataURL(5,1)}catch{e.alt='QR'}});
+  $$('svg[data-bar]').forEach(e=>{try{JsBarcode(e,e.dataset.bar,{format:'CODE128',height:34,displayValue:false,margin:0})}catch{}});
+}
+const chip=s=>`<span class="chip ${s}">${STATUS[s]||s}</span>`;
+const strip=(list,path)=>`<div class="strip">${(list||[]).map((p,i)=>`<span class="w"><img class="th" src="${p}" data-act="zoom"><b data-act="delPhoto" data-path="${path}" data-i="${i}">×</b></span>`).join('')}<button class="sec sm" data-act="addPhoto" data-path="${path}">📷 ถ่าย/เพิ่มรูป</button></div>`;
+const optList=(arr,sel)=>arr.map(x=>`<option ${x===sel?'selected':''}>${esc(x)}</option>`).join('');
+const pathOpts=sel=>`<option value="">— เลือก —</option>`+optList(docNames(),sel);
+
+/* ============ หน้า: รายการเคส ============ */
+let F={q:'',st:'',step:'',from:'',to:''};
+const shortStep=k=>stepName(k).replace(/\s*\(.*\)/,'');
+const caseStep=c=>{if(c.status!=='processing'||!c.blocks.length)return '';return STEPS[Math.min(...c.blocks.map(b=>STEPS.findIndex(x=>x[0]===b.step)))][0]};
+const PSTEPS=STEPS.filter(x=>!['grossing','qc'].includes(x[0])).map(x=>x[0]);
+const inRange=(c,f,t)=>(!f||c.createdAt>=new Date(f+'T00:00:00'))&&(!t||c.createdAt<=new Date(t+'T23:59:59.999'));
+const isoDay=d=>{const z=new Date(d);return z.getFullYear()+'-'+pad(z.getMonth()+1,2)+'-'+pad(z.getDate(),2)};
+function vCases(){
+  const byDate=db.cases.filter(c=>inRange(c,F.from,F.to));
+  const cnt=k=>byDate.filter(c=>c.status===k).length;
+  const list=byDate.filter(c=>(!F.st||c.status===F.st)&&(!F.step||caseStep(c)===F.step)&&(!F.q||[c.sNo,c.labNo,c.patient.hn,cname(c),c.patient.ward].join(' ').toLowerCase().includes(F.q.toLowerCase()))).sort((a,b)=>b.createdAt-a.createdAt);
+  const types={};byDate.forEach(c=>types[c.req.type]=(types[c.req.type]||0)+1);
+  const pend=byDate.filter(c=>!['signed','sent'].includes(c.status)).length;
+  return `<h2>Dashboard</h2>
+  <div class="card"><div class="row"><div><label>รับตั้งแต่วันที่</label><input type="date" data-act="ffrom" value="${F.from}" style="width:160px"></div><div><label>ถึงวันที่</label><input type="date" data-act="fto" value="${F.to}" style="width:160px"></div>
+   <div class="row" style="align-self:flex-end"><button class="sec sm" data-act="frange" data-v="today">วันนี้</button><button class="sec sm" data-act="frange" data-v="7">7 วันล่าสุด</button><button class="sec sm" data-act="frange" data-v="month">เดือนนี้</button><button class="sec sm" data-act="frange" data-v="all">ทั้งหมด</button></div>
+   <div class="mute" style="align-self:flex-end">ช่วงที่เลือก: ${byDate.length} เคส · ยังไม่เสร็จ ${pend} เคส</div></div></div>
+  <div class="stats"><div class="stat" data-act="fst" data-v=""><b>${byDate.length}</b><span>ทั้งหมด</span></div>${Object.keys(STATUS).filter(k=>k!=='processing').map(k=>`<div class="stat" data-act="fst" data-v="${k}" style="${F.st===k&&!F.step?'outline:2px solid var(--pri)':''}"><b>${cnt(k)}</b><span>${STATUS[k]}</span></div>`).join('')}</div>
+  <div class="card"><h3>Process — เคสที่อยู่ระหว่างขั้นตอนต่างๆ <span class="mute">(นับตามบล็อกที่ช้าที่สุดของเคส)</span></h3><div class="stats" style="margin:0">${PSTEPS.map(k=>`<div class="stat" data-act="fstep" data-v="${k}" style="${F.step===k?'outline:2px solid var(--pri)':''}"><b>${byDate.filter(c=>caseStep(c)===k).length}</b><span>${esc(shortStep(k))}</span></div>`).join('')}</div></div>
+  ${Object.keys(types).length?`<div class="card"><h3>แยกตามประเภทการตรวจ</h3>${Object.entries(types).map(([t,n])=>`<span class="chip" style="margin:2px 6px 2px 0">${esc(t)} · ${n}</span>`).join('')}</div>`:''}
+  <div class="card"><div class="row"><input style="max-width:340px" placeholder="ค้นหา S-no / LAB / HN / ชื่อ / หอผู้ป่วย" value="${esc(F.q)}" data-act="q">
+   <select style="max-width:200px" data-act="fstsel"><option value="">ทุกสถานะ</option>${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${F.st===k?'selected':''}>${v}</option>`).join('')}</select></div></div>
+  <div class="card" style="overflow:auto"><table><tr><th>วันที่รับ</th><th>S number</th><th>LAB</th><th>HN</th><th>ชื่อ-สกุล</th><th>ประเภท</th><th>ผู้รับผิดชอบ</th><th>สถานะ</th></tr>
+  ${list.map(c=>`<tr class="click" data-go="#/case/${c.id}/${c.status==='draft'?'reception':'request'}"><td>${fmtT(c.createdAt)}</td><td><b>${esc(c.sNo||'—')}</b></td><td>${esc(c.labNo||'')}</td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${esc(c.req.type)}</td><td>${esc(c.pathologist||'')}</td><td>${c.status==='processing'?`<span class="chip">${esc(shortStep(caseStep(c)))}</span>`:chip(c.status)}</td></tr>`).join('')||'<tr><td colspan=8 class="mute">ไม่พบเคสในช่วงที่เลือก</td></tr>'}</table></div>`;
+}
+
+function vLogin(){return db.session?`<div class="card"><h2>เข้าสู่ระบบแล้ว</h2><p>${esc(db.session.name)}</p><a class="btn" href="#/worklist">ไปหน้างานพยาธิแพทย์</a> <button class="sec" data-act="logout">ออกจากระบบ</button></div>`
+ :`<div class="card" style="max-width:420px;margin:30px auto"><h2>เข้าสู่ระบบแพทย์</h2><form id="lgn"><label>เลขประจำตัว 13 หลัก</label><input name="cid" inputmode="numeric" maxlength="13" pattern="[0-9]{13}" required>
+ <label style="margin-top:8px">รหัสผ่าน</label><input name="pw" type="password" required><div id="lgmsg" class="note" style="display:none"></div><div style="margin-top:12px"><button>เข้าสู่ระบบ</button></div></form><div class="mute" style="margin-top:8px">เจ้าหน้าที่ห้องแลบใช้งานเมนูอื่นได้โดยไม่ต้องล็อกอิน (กรอกชื่อผู้ปฏิบัติงานมุมขวาบน)</div></div>`}
+function vReq(){const l=[...db.cases].sort((a,b)=>b.createdAt-a.createdAt);
+ return `<div class="row" style="justify-content:space-between"><h2>ใบคำขอตรวจทางพยาธิวิทยา (Pathology Request)</h2><a class="btn" href="#/new">+ ใบคำขอใหม่</a></div>
+ <div class="card" style="overflow:auto"><table><tr><th>วันที่</th><th>HN</th><th>ชื่อ-สกุล</th><th>ประเภท</th><th>แพทย์ผู้สั่ง</th><th>ผู้กรอก</th><th>S number</th><th>สถานะ</th></tr>
+ ${l.map(c=>`<tr class="click" data-go="#/case/${c.id}/request"><td>${fmtT(c.createdAt)}</td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${esc(c.req.type)}</td><td>${esc(c.patient.doctor||'')}</td><td>${esc(c.req.filler?.name||'')}${c.req.filler?.isDoctor?' <span class="mute">(แพทย์)</span>':''}</td><td>${esc(c.sNo||'—')}</td><td>${chip(c.status)}</td></tr>`).join('')||'<tr><td colspan=8 class="mute">ยังไม่มีใบคำขอ</td></tr>'}</table></div>`}
+let RQ='draft';
+function vRecQ(){const l=db.cases.filter(c=>RQ==='all'||(RQ==='draft'?c.status==='draft':c.status!=='draft')).sort((a,b)=>RQ==='reg'?(b.regAt||b.createdAt)-(a.regAt||a.createdAt):a.createdAt-b.createdAt);
+ const n=k=>db.cases.filter(c=>k==='all'||(k==='draft'?c.status==='draft':c.status!=='draft')).length;
+ return `<h2>2) รับใบและสิ่งส่งตรวจ</h2><div class="row" style="margin-bottom:10px">${[['draft','รอลงทะเบียน'],['reg','ลงทะเบียนแล้ว'],['all','ทั้งหมด']].map(([k,t])=>`<button class="${RQ===k?'':'sec'}" data-act="rq" data-v="${k}">${t} (${n(k)})</button>`).join('')}</div>
+ <div class="note">เลือกใบคำขอ → ถ่ายรูปสิ่งส่งตรวจ → เลือกแพทย์ผู้รับผิดชอบ → ลงทะเบียนออกเลข</div><div class="card" style="overflow:auto"><table><tr><th>รับใบคำขอ</th><th>ลงทะเบียน</th><th>S number</th><th>HN</th><th>ชื่อ</th><th>ประเภท</th><th>ภาชนะ</th><th>สถานะ</th></tr>
+ ${l.map(c=>`<tr class="click" data-go="#/case/${c.id}/reception"><td>${fmtT(c.createdAt)}</td><td>${fmtT(c.regAt)||'—'}</td><td><b>${esc(c.sNo||'—')}</b></td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${esc(c.req.type)}</td><td>${c.containers.map(ctLabel).join(', ')}</td><td>${chip(c.status)}</td></tr>`).join('')||'<tr><td colspan=8 class="mute">ไม่มีรายการ</td></tr>'}</table></div>`}
+/* ============ หน้า: ใบคำขอใหม่ (HIS / กรอกเอง / OCR) ============ */
+function vNew(){return `<h2>ใบคำขอตรวจทางพยาธิวิทยา (Pathology Request) — ใบใหม่</h2>
+ <form id="frm">
+ <div class="card"><h3>แหล่งข้อมูล</h3>
+  <div class="grid g2"><div><label>ดึงจาก HIS (HOSxP) ด้วย HN</label><div class="row"><input id="pullhn" placeholder="เช่น 6812345 (ตัวอย่าง: 6812345, 6923456, 7034567)" style="flex:1"><button type="button" data-act="pull">ดึงข้อมูล</button></div><div id="pullmsg" class="mute"></div></div>
+  <div><label>ใบนำส่งกระดาษ (ส่งจาก รพ.อื่น) — ถ่ายรูปแล้ว OCR</label><button type="button" class="sec" data-act="ocr">📷 ถ่าย/อัปโหลดใบนำส่ง (OCR)</button><div id="ocrmsg" class="mute"></div></div></div>
+  <div class="inl" style="margin-top:8px"><label><input type="radio" name="source" value="HIS" checked> ดึงจาก HIS</label><label><input type="radio" name="source" value="manual"> กรอกใหม่ / ส่งจาก รพ.อื่น</label></div></div>
+ <div class="card"><h3>ข้อมูลผู้ป่วย</h3><div class="grid g3">
+  <div><label>HN *</label><input name="hn" required></div><div><label>ชื่อ *</label><input name="fname" required></div><div><label>นามสกุล *</label><input name="lname" required></div>
+  <div><label>วันเกิด</label><input type="date" name="dob" data-act="dob"></div><div><label>อายุ (ปี)</label><input name="age" type="number" min="0"></div>
+  <div><label>เพศ</label><select name="sex"><option>ช</option><option>ญ</option></select></div>
+  <div><label>โรงพยาบาลที่ส่ง</label><input name="hospital" value="โรงพยาบาลพุทธชินราช พิษณุโลก"></div><div><label>หอผู้ป่วย / แผนก</label><input name="ward"></div></div></div>
+ <div class="card"><h3>รายละเอียดการตรวจ</h3><div class="grid g2">
+  <div><label>ประเภทการตรวจ</label><select name="type">${optList(RTYPES)}</select><input name="typeOther" placeholder="ระบุ (กรณีอื่นๆ)" style="margin-top:4px"></div>
+  <div><label>ชื่อการผ่าตัด / วิธีได้ชิ้นเนื้อ</label><div class="inl">${PROCS.map((p,i)=>`<label><input type="radio" name="proc" value="${p}" ${i===3?'checked':''}> ${p}</label>`).join('')}</div><input name="procOther" placeholder="ระบุ (กรณี Other)"></div></div>
+  <label style="margin-top:10px">สิ่งส่งตรวจ — จากอวัยวะ/ส่วนใดของร่างกาย (เพิ่มได้)</label><div id="sites"><div class="row" style="margin-bottom:4px"><span>1.</span><input name="site" style="flex:1"></div></div>
+  <button type="button" class="sec sm" data-act="addSite">+ เพิ่มสิ่งส่งตรวจ</button>
+  <div class="grid g3" style="margin-top:10px"><div><label>ภาชนะ: ถุง (จำนวน)</label><input type="number" name="bags" min="0" value="0"></div><div><label>ภาชนะ: ขวด (จำนวน)</label><input type="number" name="bottles" min="0" value="0"></div>
+  <div><label>HIV</label><div class="inl"><label><input type="radio" name="hiv" value="pos"> Pos</label><label><input type="radio" name="hiv" value="neg"> Neg</label><label><input type="radio" name="hiv" value="not exam" checked> Not exam</label></div></div></div></div>
+ <div class="card"><h3>ข้อมูลทางคลินิก</h3><div class="grid g2">
+  <div><label>ประวัติการเจ็บป่วยโดยสังเขป</label><textarea name="history" style="min-height:128px"></textarea></div><div><label>ผลการตรวจร่างกายเบื้องต้น</label><textarea name="exam" style="min-height:128px"></textarea></div>
+  <div><label>ผลการตรวจรังสีวิทยา</label><textarea name="radiology"></textarea></div><div><label>ผลการวินิจฉัยทางพยาธิครั้งก่อน</label><textarea name="prevPatho"></textarea></div>
+  <div><label>Provisional diagnosis</label><input name="provisional"></div></div></div>
+<div class="card"><h3>แพทย์ผู้สั่งตรวจ / ผู้กรอกใบคำขอ</h3><div class="grid g2"><div><label>แพทย์ผู้สั่งตรวจ *</label><input name="doctor" required></div>
+  <div><label>ผู้กรอกใบคำขอ *</label><div class="inl"><label><input type="checkbox" name="fillerIsDoc" data-act="fillerDoc" checked> ผู้กรอกคือแพทย์ผู้สั่งตรวจ</label></div><input name="filler" placeholder="ชื่อ-สกุล ผู้กรอก (เจ้าหน้าที่/พยาบาล)" disabled></div></div></div>
+ <button>บันทึกใบคำขอ</button></form>`;}
+
+/* ============ หน้า: เคส ============ */
+function vCase(r){
+  const c=getCase(r.id);if(!c)return '<p>ไม่พบเคส</p>';
+  const T=[['request','1 ใบคำขอ'],['reception','2 รับเคส'],['gross','3 ตัดชิ้นเนื้อ/บล็อก'],['process','4 Process'],['review','5 แพทย์อ่าน'],['order','6 สั่งเพิ่ม'],['report','7 รายงานผล'],['his','8 ส่ง HIS']];
+  const p=c.patient;
+  const body={request:tRequest,reception:tReception,gross:tGross,process:tProcess,review:tReview,order:tOrder,report:tReport,his:tHisCase}[r.tab]||tReception;
+  return `<div class="card"><div class="row" style="justify-content:space-between"><div><h2 style="margin:0">${esc(c.sNo||'(ร่างใบคำขอ)')} ${c.labNo?`<span class="mute">· ${esc(c.labNo)}</span>`:''}</h2>
+   <div><b>${esc(cname(c))}</b> · HN ${esc(p.hn)} · ${p.age||'?'} ปี · ${esc(p.sex)} · ${esc(p.hospital)} · ${esc(p.ward||'')}</div><div class="mute">${esc(c.req.type)} · ${esc(c.req.proc)} · HIV: ${esc(c.req.hiv)} · ${c.source==='HIS'?'ดึงจาก HIS':'กรอกเอง/ต่าง รพ.'}</div></div>
+   <div style="text-align:right">${chip(c.status)}${c.sNo?`<div><svg data-bar="${esc(c.labNo)}"></svg><div class="mute">${esc(c.labNo)}</div></div>`:''}</div></div></div>
+  <div class="tabs">${T.map(([k,t])=>`<a href="#/case/${c.id}/${k}" class="${r.tab===k?'on':''}">${t}</a>`).join('')}</div>${body(c)}`;
+}
+const clin=c=>`<div class="card"><h3>ข้อมูลใบคำขอ</h3><div class="grid g2">
+ <div><b>สิ่งส่งตรวจ:</b> ${c.req.sites.map((s,i)=>`${i+1}. ${esc(s)}`).join(' · ')||'—'}</div><div><b>ประวัติ:</b> ${esc(c.req.history)||'—'}</div>
+ <div><b>ตรวจร่างกาย:</b> ${esc(c.req.exam)||'—'}</div><div><b>รังสีวิทยา:</b> ${esc(c.req.radiology)||'—'}</div>
+ <div><b>Patho ครั้งก่อน:</b> ${esc(c.req.prevPatho)||'—'}</div><div><b>Provisional Dx:</b> ${esc(c.req.provisional)||'—'}</div><div><b>แพทย์ผู้สั่ง:</b> ${esc(c.patient.doctor||'—')} · <b>ผู้กรอก:</b> ${esc(c.req.filler?.name||'—')}${c.req.filler?.isDoctor?' (แพทย์ผู้สั่ง)':''}</div></div></div>`;
+
+function tRequest(c){return clin(c)+`<div class="card">${c.status==='draft'?`<a class="btn" href="#/case/${c.id}/reception">ไปรับสิ่งส่งตรวจ →</a>`:`<span class="mute">ลงทะเบียนแล้ว ${esc(c.sNo)}</span>`}</div>`}
+function tReception(c){
+  return clin(c)+`<div class="card"><h3>ถ่ายรูปสิ่งส่งตรวจที่รับมา (อย่างน้อย 1 รูปต่อภาชนะ)</h3>
+  ${c.containers.map((ct,i)=>`<div style="border-top:1px solid var(--line);padding:8px 0"><div class="row"><b>${esc(ctFull(c,ct))}</b>
+   <input style="max-width:340px" placeholder="ระบุชิ้นเนื้อ/อวัยวะในภาชนะนี้" data-bind="containers.${i}.site" value="${esc(ct.site)}">
+   ${c.sNo?`<button class="sec sm" data-act="printCt" data-i="${i}">พิมพ์ป้ายภาชนะ</button>`:''}</div>${strip(ct.photos,`containers.${i}.photos`)}</div>`).join('')}
+  <div class="grid g2" style="margin-top:8px"><div><label>พยาธิแพทย์ผู้รับผิดชอบ</label><select data-bind="pathologist">${pathOpts(c.pathologist)}</select></div></div>
+  ${c.status==='draft'?`<div style="margin-top:12px"><button data-act="register">ลงทะเบียน + ออกเลข LAB / Surgical number</button><div class="mute">ระบบจะออกเลข ${'S'+yy()}-xxxxx และ Barcode ให้อัตโนมัติ</div></div>`
+   :`<div class="ok">ลงทะเบียนแล้ว: <b>${esc(c.sNo)}</b> · ${esc(c.labNo)} · ${c.containers.map(ct=>esc(ctFull(c,ct))).join(', ')}</div>`}</div>`;
+}
+
+function tGross(c){
+  if(c.status==='draft')return '<div class="note">ต้องลงทะเบียนเคสก่อน</div>';
+  const used=c.blocks.map(b=>b.letter),nextL=String.fromCharCode(65+used.length);
+  return `<div class="card"><h3>ถ่ายรูปชิ้นเนื้อพร้อมมาตรวัด → Gross description</h3>
+  <div class="note">การนับก้อน/สีจากรูปเป็นการประมาณโดยโปรแกรมในเครื่อง (ใช้พื้นหลังเรียบ) ผู้ตัดต้องตรวจสอบและแก้ไขข้อความเสมอ ${db.settings.aiEndpoint?'· เชื่อมต่อ AI endpoint แล้ว':''}</div>
+  ${c.containers.map((ct,i)=>`<div style="border-top:1px solid var(--line);padding:8px 0"><b>${esc(ctFull(c,ct))}</b> <span class="mute">${esc(ct.site||'')}</span>
+   ${strip(ct.gPhotos,`containers.${i}.gPhotos`)}
+   <div class="grid g3"><div><label>จำนวนก้อน</label><input type="number" data-bind="containers.${i}.g.pieces" value="${ct.g?.pieces??''}"></div><div><label>สี</label><input data-bind="containers.${i}.g.color" value="${esc(ct.g?.color||'')}" placeholder="dark-brown"></div>
+   <div><label>รูปร่าง</label><input data-bind="containers.${i}.g.shape" value="${esc(ct.g?.shape||'')}" placeholder="irregular shape"></div><div><label>ขนาดรวม (จากมาตรวัด)</label><input data-bind="containers.${i}.g.size" value="${esc(ct.g?.size||'')}" placeholder="1.2x0.8x0.5 cm"></div></div>
+   <div class="row" style="margin:6px 0"><button class="sec sm" data-act="aiGross" data-i="${i}">🤖 วิเคราะห์รูป → เขียน Gross</button><button class="sec sm" data-act="compGross" data-i="${i}">สร้างข้อความจากค่าที่กรอก</button></div>
+   <label>Gross description</label><textarea data-bind="containers.${i}.gross">${esc(ct.gross||'')}</textarea></div>`).join('')}</div>
+  <div class="card"><h3>กำหนดบล็อก (Cassette)</h3>
+  <div class="row"><div><label>จำนวนบล็อกที่เพิ่ม</label><input id="bn" type="number" min="1" value="1" style="width:100px"></div><div><label>เริ่มจากตัวอักษร</label><input id="bl" value="${nextL}" maxlength="1" style="width:80px;text-transform:uppercase"></div>
+  <div><label>สีบล็อก</label><select id="bc" style="width:110px">${optList(COLORS)}</select></div><div style="align-self:flex-end"><button data-act="mkBlocks">สร้างบล็อก</button></div></div>
+  ${c.blocks.length?`<table style="margin-top:10px"><tr><th>บล็อก</th><th>สี</th><th>จากภาชนะ</th><th>จำนวนชิ้นในบล็อก</th><th>ขั้นตอนปัจจุบัน</th><th></th></tr>
+  ${c.blocks.map((b,i)=>`<tr><td><b>${esc(c.sNo+'-'+b.letter)}</b></td><td><select data-bind="blocks.${i}.color">${optList(COLORS,b.color)}</select></td>
+   <td><select data-bind="blocks.${i}.ct" data-num="1">${c.containers.map((ct,j)=>`<option value="${j}" ${b.ct===j?'selected':''}>${esc(ctLabel(ct))}</option>`).join('')}</select></td>
+   <td><input type="number" min="1" style="width:90px" data-bind="blocks.${i}.pieces" data-num="1" value="${b.pieces||''}"></td><td>${esc(stepName(b.step))}</td>
+   <td><button class="bad sm" data-act="delBlock" data-i="${i}" ${b.step!=='grossing'?'disabled':''}>ลบ</button></td></tr>`).join('')}</table>
+  <div class="row" style="margin-top:10px"><button data-act="printBlocks">🖨 พิมพ์สติกเกอร์สรุป (QR) + ป้ายบล็อก</button><span class="mute">สรุป: ${c.blocks.length} Block (${c.blocks.length>1?c.blocks[0].letter+'-'+c.blocks.at(-1).letter:c.blocks[0].letter}) — แปะหน้ากระปุก</span></div>`:''}</div>`;
+}
+
+function tProcess(c){
+  if(c.status==='draft')return '<div class="note">ต้องลงทะเบียนเคสก่อน</div>';
+  return `<div class="card"><h3>สถานะแต่ละบล็อก</h3><table><tr><th>บล็อก</th>${STEPS.map(s=>`<th>${s[1].split(' ')[0]}</th>`).join('')}</tr>
+  ${c.blocks.map(b=>`<tr><td><b>${esc(c.sNo+'-'+b.letter)}</b></td>${STEPS.map(s=>{const e=b.steps.find(x=>x.step===s[0]);return `<td>${e?`✔ <span class="mute">${fmtT(e.ts)}</span>${e.photo?` <img class="th" style="width:34px;height:34px" src="${e.photo}" data-act="zoom">`:''}`:'·'}</td>`}).join('')}</tr>`).join('')||'<tr><td colspan=9 class="mute">ยังไม่มีบล็อก</td></tr>'}</table>
+  <div class="mute">บันทึกขั้นตอนที่หน้า “สแกนขั้นตอน” (ถ่ายรูปงานคู่กับ QR)</div></div>
+  <div class="card"><h3>ประวัติเหตุการณ์</h3><div class="tl">${[...c.events].reverse().map(e=>`<div><b>${fmtT(e.ts)}</b> · ${esc(e.by)} — ${esc(e.text)}</div>`).join('')}</div></div>`;
+}
+
+function tReview(c){
+  if(c.status==='draft')return '<div class="note">ต้องลงทะเบียนเคสก่อน</div>';
+  const deny=accessNote(c);if(deny)return deny;
+  const sameHN=db.cases.filter(x=>x.patient.hn===c.patient.hn&&x.id!==c.id&&x.sNo);
+  return clin(c)+`<div class="card"><h3>สิ่งส่งตรวจ / Gross / บล็อก</h3>
+  ${c.containers.map(ct=>`<div style="margin-bottom:8px"><b>${esc(ctFull(c,ct))}</b> — ${esc(ct.site||'')}<div>${esc(ct.gross||'(ยังไม่มี gross)')}</div><div class="strip">${[...(ct.photos||[]),...(ct.gPhotos||[])].map(p=>`<img class="th" src="${p}" data-act="zoom">`).join('')}</div></div>`).join('')}
+  <div>${c.blocks.map(b=>`<span class="chip" style="margin:2px">${esc(c.sNo+'-'+b.letter)} · ${esc(stepName(b.step))}</span>`).join('')||'<span class="mute">ยังไม่มีบล็อก</span>'}</div>
+  <div class="row" style="margin-top:10px">${!c.reading&&c.status!=='signed'&&c.status!=='sent'?`<button data-act="startRead" ${c.status==='ready'?'':'disabled'}>รับเคส / เริ่มอ่าน</button>`:''}<span class="mute">${c.status==='ready'||c.reading?'':'รอบล็อกครบทุกขั้นตอนก่อนเริ่มอ่านได้'}</span></div></div>
+  ${sameHN.length?`<div class="card"><h3>เคสก่อนหน้าของ HN นี้</h3>${sameHN.map(x=>`<div><a href="#/case/${x.id}/report">${esc(x.sNo)}</a> · ${esc(x.req.type)} · ${chip(x.status)} · ${esc(x.report?.dx||'')}</div>`).join('')}</div>`:''}
+`;
+}
+function tOrder(c){
+  if(c.status==='draft')return '<div class="note">ต้องลงทะเบียนเคสก่อน</div>';
+  const deny=accessNote(c);if(deny)return deny;
+  return `<div class="card"><h3>สั่งงานเพิ่ม (ตัดใหม่ / ย้อมพิเศษ / IHC)</h3>
+  <div class="grid g3"><div><label>บล็อก</label><select id="ob"><option value="">ทั้งเคส</option>${c.blocks.map(b=>`<option value="${b.letter}">${esc(c.sNo+'-'+b.letter)}</option>`).join('')}</select></div>
+  <div><label>ประเภท</label><select id="ok"><option value="recut">ตัดใหม่ (Recut / deeper level)</option><option value="special">ย้อมพิเศษ</option><option value="ihc">Immunohistochemistry</option></select></div>
+  <div><label>รายการ / marker</label><select id="on1">${optList(STAINS)}</select><input id="on2" placeholder="marker / หมายเหตุ เช่น CK7, CD20" style="margin-top:4px"></div></div>
+  <button data-act="order" style="margin-top:8px" ${c.status==='signed'||c.status==='sent'?'disabled':''}>เพิ่มคำสั่ง</button>
+  <table style="margin-top:8px"><tr><th>บล็อก</th><th>ประเภท</th><th>รายการ</th><th>สั่งโดย</th><th>สถานะ</th></tr>${c.orders.map(o=>`<tr><td>${esc(o.block?c.sNo+'-'+o.block:'ทั้งเคส')}</td><td>${{recut:'ตัดใหม่',special:'ย้อมพิเศษ',ihc:'IHC'}[o.kind]}</td><td>${esc(o.name)} ${esc(o.note)}</td><td>${esc(o.by)}</td><td>${o.status==='done'?'✔ เสร็จ':'รอห้องแลบ'}</td></tr>`).join('')||'<tr><td colspan=5 class="mute">ยังไม่มี</td></tr>'}</table></div>`;
+}
+
+const TPL={
+ 'ทั่วไป':{dx:'',micro:'',comment:''},
+ 'Colon polyp':{dx:'Colon, polypectomy: - Tubular adenoma with low-grade dysplasia\n- No high-grade dysplasia or invasive carcinoma identified',micro:'Sections show polypoid colonic mucosa composed of crowded tubular glands lined by elongated hyperchromatic nuclei with pseudostratification.',comment:''},
+ 'Appendix':{dx:'Appendix, appendectomy: - Acute appendicitis',micro:'Sections show transmural neutrophilic infiltration of the appendiceal wall with mucosal ulceration.',comment:''},
+ 'PAP smear':{dx:'Cervix, Pap smear: - Negative for intraepithelial lesion or malignancy (NILM)',micro:'Satisfactory for evaluation. Superficial and intermediate squamous cells with endocervical cells present.',comment:''},
+ 'Skin punch':{dx:'Skin, punch biopsy: - ',micro:'',comment:''}};
+function tReport(c){
+  if(c.status==='draft')return '<div class="note">ต้องลงทะเบียนเคสก่อน</div>';
+  const r=c.report||(c.report={});const lock=c.status==='signed'||c.status==='sent',dis=lock?'disabled':'';
+  const pend=pendingOrders(c);
+  return `<div class="card"><div class="row"><div><label>Template</label><select id="tpl" ${dis}>${optList(Object.keys(TPL))}</select></div><button class="sec sm" style="align-self:flex-end" data-act="tpl" ${dis}>ใช้ template</button>
+   <button class="sec sm" style="align-self:flex-end" data-act="aiDraft" ${dis}>🤖 AI ร่างจากรูป/ข้อมูลเคส</button><button class="sec sm" style="align-self:flex-end" data-act="aiSlide" ${dis}>🔬 AI อ่านรูป Slide (scan)</button></div>
+  <div class="strip">${(r.slides||[]).map(p=>`<img class="th" src="${p}" data-act="zoom">`).join('')}${lock?'':`<button class="sec sm" data-act="addPhoto" data-path="report.slides">+ รูป slide ที่ scan</button>`}</div>
+  <label>Diagnosis</label><textarea ${dis} data-bind="report.dx" style="min-height:90px">${esc(r.dx||'')}</textarea>
+  <label>Microscopic description</label><textarea ${dis} data-bind="report.micro">${esc(r.micro||'')}</textarea>
+  <label>Comment / Recommendation</label><textarea ${dis} data-bind="report.comment">${esc(r.comment||'')}</textarea>
+  <div class="row" style="margin-top:8px"><button class="warn" data-act="aiReview" ${dis}>🤖 ให้ AI ทบทวนรายงาน</button><button class="sec" data-act="printRep">🖨 พิมพ์รายงาน</button></div>
+  <div id="aiout">${(r.aiNotes||[]).map(n=>`<div class="note">${esc(n)}</div>`).join('')}</div></div>
+  <div class="card"><h3>ปรึกษาพยาธิแพทย์ท่านอื่น</h3>
+  ${(c.consults||[]).map((k,i)=>`<div style="border-top:1px solid var(--line);padding:6px 0"><b>${esc(k.from)} → ${esc(k.to)}</b> <span class="mute">${fmtT(k.ts)}</span><div>${esc(k.msg)}</div>${k.reply?`<div class="ok">ตอบ: ${esc(k.reply)} <span class="mute">(${fmtT(k.rts)})</span></div>`:`<div class="row"><input id="rp${i}" placeholder="พิมพ์คำตอบ (ในนาม ${esc(k.to)})"><button class="sm sec" data-act="reply" data-i="${i}">ตอบ</button></div>`}</div>`).join('')}
+  <div class="row" style="margin-top:6px"><select id="ct" style="max-width:220px">${pathOpts()}</select><input id="cm" placeholder="ข้อความปรึกษา" style="flex:1"><button class="sec" data-act="consult" ${dis}>ส่งปรึกษา</button></div></div>
+  <div class="card"><h3>ลงนามอนุมัติผล</h3>
+  ${lock?`<div class="ok">อนุมัติโดย ${esc(r.signedBy)} เมื่อ ${fmtT(r.signedAt)}</div>`:`${pend.length?`<div class="note">ยังมีงานเพิ่มค้างอยู่ ${pend.length} รายการ — ต้องเสร็จก่อนลงนาม</div>`:''}
+   ${db.session?`<div class="row"><b>ลงนามโดย ${esc(db.session.name)}</b><button data-act="sign" ${pend.length||!c.blocks.length?'disabled':''}>ลงนามอนุมัติ (Final)</button></div>`:'<div class="note">ต้อง<a href="#/login">เข้าสู่ระบบแพทย์</a>ก่อนจึงลงนามได้</div>'}`}</div>`;
+}
+
+function payload(c){const p=c.patient,r=c.report||{};return {messageType:'PATHOLOGY_RESULT',reportStatus:'FINAL',hn:p.hn,patientName:cname(c),sex:p.sex,dob:p.dob,ward:p.ward,orderingDoctor:p.doctor,
+  surgicalNo:c.sNo,labNo:c.labNo,requestType:c.req.type,specimens:c.containers.map(ct=>({id:ctFull(c,ct),site:ct.site,gross:ct.gross})),
+  blocks:c.blocks.map(b=>c.sNo+'-'+b.letter),additional:c.orders.map(o=>({block:o.block,kind:o.kind,name:o.name,status:o.status})),
+  diagnosis:r.dx,microscopic:r.micro,comment:r.comment,pathologist:r.signedBy,signedAt:r.signedAt?new Date(r.signedAt).toISOString():null}}
+function tHisCase(c){
+  const ok=c.status==='signed'||c.status==='sent';
+  return `<div class="card"><h3>ส่งผลกลับเข้า HIS (HOSxP) และหมอพร้อม</h3>
+  ${ok?'':'<div class="note">ต้องลงนามอนุมัติผลก่อนจึงส่งได้</div>'}
+  <pre>${esc(JSON.stringify(payload(c),null,2))}</pre>
+  <div class="inl"><label><input type="checkbox" id="chH" checked> HIS (HOSxP)</label><label><input type="checkbox" id="chM" checked> หมอพร้อม</label></div>
+  <div class="row"><button data-act="send" ${ok?'':'disabled'}>ส่งผล</button><button class="sec" data-act="dlJson">ดาวน์โหลด JSON</button></div>
+  ${c.sent?`<div class="ok">ส่งแล้ว ${fmtT(c.sent.ts)} → ${esc(c.sent.channels.join(', '))} (${c.sent.mode==='http'?'ส่งผ่าน HTTP สำเร็จ':'โหมดจำลอง — ยังไม่ได้ตั้ง endpoint'})</div>`:''}</div>`;
+}
+
+/* ============ หน้า: ห้องตัดชิ้นเนื้อ / สแกน / แพทย์ / HIS / ตั้งค่า ============ */
+function vGrossQ(){const l=db.cases.filter(c=>['registered','grossed'].includes(c.status));
+  return `<h2>3) ตัดชิ้นเนื้อ / บล็อก (Grossing)</h2><div class="card"><table><tr><th>S number</th><th>HN</th><th>ชื่อ</th><th>ภาชนะ</th><th>สถานะ</th></tr>${l.map(c=>`<tr class="click" data-go="#/case/${c.id}/gross"><td><b>${esc(c.sNo)}</b></td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${c.containers.map(ctLabel).join(', ')}</td><td>${chip(c.status)}</td></tr>`).join('')||'<tr><td class="mute">ไม่มีคิว</td></tr>'}</table></div>`}
+
+function vScan(){
+  const open=db.cases.flatMap(c=>c.orders.filter(o=>o.status!=='done').map(o=>({c,o})));
+  return `<h2>4) Process — สแกน (ถ่ายรูปงานคู่กับ QR)</h2>
+  <div class="card"><div class="grid g2"><div><label>ขั้นตอนที่ทำ</label><select id="sst">${STEPS.map(s=>`<option value="${s[0]}">${s[1]}</option>`).join('')}</select></div>
+  <div><label>QR / รหัส (S69-00001 = ทุกบล็อกของกระปุก, S69-00001-A = บล็อกเดียว)</label><input id="sqr" placeholder="สแกนด้วยกล้อง / ถ่ายรูป QR / หรือพิมพ์รหัสเอง"></div></div>
+  <div id="sph" class="strip"></div>
+  <div class="row"><button data-act="scanCam">📷 สแกน QR ด้วยกล้อง</button><button class="sec" data-act="scanPhoto">ถ่ายรูป/เลือกรูปงานที่มี QR</button><button data-act="scanSave">บันทึกขั้นตอน</button></div><div id="smsg"></div>
+  <div class="mute">สแกนด้วยกล้อง: ระบบอ่าน QR แล้วเก็บภาพงานคู่กับรหัสให้อัตโนมัติ · หากใช้กล้องสดไม่ได้ ให้ถ่ายรูป/เลือกรูปที่เห็น QR ชัดๆ หรือพิมพ์รหัสเอง</div></div>
+  <div class="card"><h3>งานเพิ่มที่ค้างอยู่ (ตัดใหม่ / ย้อมพิเศษ / IHC)</h3><table><tr><th>เคส</th><th>บล็อก</th><th>รายการ</th><th></th></tr>${open.map(({c,o})=>`<tr><td><a href="#/case/${c.id}/process">${esc(c.sNo)}</a></td><td>${esc(o.block||'ทั้งเคส')}</td><td>${{recut:'ตัดใหม่',special:'ย้อมพิเศษ',ihc:'IHC'}[o.kind]} ${esc(o.name)} ${esc(o.note)}</td><td><button class="sm" data-act="orderDone" data-c="${c.id}" data-o="${o.id}">เสร็จแล้ว</button></td></tr>`).join('')||'<tr><td colspan=4 class="mute">ไม่มีงานค้าง</td></tr>'}</table></div>`;
+}
+let scanPhoto='';
+
+let W={q:'',ph:'',st:'',grp:false};
+/* สิทธิ์: เฉพาะแพทย์ที่ธุรการมอบหมายตอนรับเคส หรือแพทย์ที่ได้รับการปรึกษา (ต้อง login) */
+const canAct=c=>!!db.session&&!!c.sNo&&(c.pathologist===db.session.name||(c.consults||[]).some(k=>k.to===db.session.name));
+const actRole=c=>c.pathologist===db.session?.name?'ผู้รับผิดชอบ':'รับปรึกษา';
+const accessNote=c=>!db.session?`<div class="note">ต้อง<a href="#/login">เข้าสู่ระบบแพทย์</a>ก่อน</div>`:!canAct(c)?`<div class="note">เคสนี้เปิดได้เฉพาะแพทย์ที่ได้รับมอบหมาย (${esc(c.pathologist||'—')}) หรือแพทย์ที่ได้รับปรึกษาเท่านั้น</div>`:'';
+function vDoc(mode){
+  if(!db.session)return `<div class="note">หน้านี้สำหรับพยาธิแพทย์ — กรุณาเข้าสู่ระบบ</div>`+vLogin();
+  const l=db.cases.filter(c=>canAct(c)&&(!W.st||c.status===W.st)&&(!W.q||[c.sNo,c.patient.hn,cname(c),c.req.provisional,c.report?.dx].join(' ').toLowerCase().includes(W.q.toLowerCase()))).sort((a,b)=>a.createdAt-b.createdAt);
+  const ord=mode==='order',cols=ord?8:7;
+  const row=c=>`<tr class="click" data-go="#/case/${c.id}/${mode}"><td><b>${esc(c.sNo)}</b></td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${esc(c.req.type)}</td><td>${esc(c.req.provisional)}</td><td>${actRole(c)}</td>${ord?`<td>${c.orders.length} (ค้าง ${pendingOrders(c).length})</td>`:''}<td>${chip(c.status)}</td></tr>`;
+  let body;if(W.grp){const g={};l.forEach(c=>(g[c.patient.hn]??=[]).push(c));body=Object.entries(g).map(([hn,a])=>`<tr><td colspan=${cols} style="background:var(--pri2)"><b>HN ${esc(hn)} · ${esc(cname(a[0]))}</b> (${a.length} เคส)</td></tr>${a.map(row).join('')}`).join('')}else body=l.map(row).join('');
+  return `<h2>${ord?'6) สั่งเพิ่ม (ตัดใหม่ / ย้อมพิเศษ / IHC)':'5) แพทย์อ่าน'}</h2><div class="mute" style="margin-bottom:8px">แสดงเฉพาะเคสที่ ${esc(db.session.name)} ได้รับมอบหมาย หรือได้รับปรึกษา</div><div class="card"><div class="row"><input data-act="wq" style="max-width:300px" placeholder="ค้นหา S-no / HN / ชื่อ / Dx" value="${esc(W.q)}">
+  <select style="max-width:180px" data-act="wst"><option value="">ทุกสถานะ</option>${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${W.st===k?'selected':''}>${v}</option>`).join('')}</select>
+  <label class="inl" style="margin:0"><input type="checkbox" data-act="wgrp" ${W.grp?'checked':''}> รวมตาม HN</label></div></div>
+  <div class="card" style="overflow:auto"><table><tr><th>S number</th><th>HN</th><th>ชื่อ</th><th>ประเภท</th><th>Provisional</th><th>บทบาท</th>${ord?'<th>งานเพิ่ม</th>':''}<th>สถานะ</th></tr>${body||`<tr><td colspan=${cols} class="mute">ไม่พบเคส</td></tr>`}</table></div>`;
+}
+const vWork=()=>vDoc('review'),vOrders=()=>vDoc('order');
+
+function vRepQ(){const l=db.cases.filter(c=>['ready','reading','signed','sent'].includes(c.status)).sort((a,b)=>b.createdAt-a.createdAt);
+  return `<h2>7) รายงานผล</h2><div class="card" style="overflow:auto"><table><tr><th>S number</th><th>HN</th><th>ชื่อ</th><th>ประเภท</th><th>แพทย์</th><th>Diagnosis</th><th>สถานะ</th></tr>${l.map(c=>`<tr class="click" data-go="#/case/${c.id}/report"><td><b>${esc(c.sNo)}</b></td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${esc(c.req.type)}</td><td>${esc(c.pathologist||'')}</td><td>${esc((c.report?.dx||'').slice(0,60))}</td><td>${chip(c.status)}</td></tr>`).join('')||'<tr><td colspan=7 class="mute">ยังไม่มีเคสที่พร้อมรายงาน</td></tr>'}</table></div>`}
+function vHis(){const l=db.cases.filter(c=>['signed','sent'].includes(c.status));
+  return `<h2>8) ส่ง HIS / หมอพร้อม</h2><div class="card"><table><tr><th>S number</th><th>HN</th><th>ชื่อ</th><th>อนุมัติ</th><th>สถานะ</th></tr>${l.map(c=>`<tr class="click" data-go="#/case/${c.id}/his"><td><b>${esc(c.sNo)}</b></td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${fmtT(c.report.signedAt)}</td><td>${chip(c.status)}</td></tr>`).join('')||'<tr><td class="mute">ยังไม่มีผลที่อนุมัติ</td></tr>'}</table></div>`}
+function vSet(){const s=db.settings;return `<h2>ตั้งค่า</h2><div class="card"><div class="grid g2">
+ <div><label>รายชื่อแพทย์ (บรรทัดละคน: เลข 13 หลัก เว้นวรรค ชื่อ) — ใช้เลข 13 หลักล็อกอิน</label><textarea id="sp" style="min-height:150px">${esc(s.doctors.map(d=>d.id+' '+d.name).join('\n'))}</textarea></div>
+ <div><label>HIS pull URL (GET ?hn=xxx คืน JSON ผู้ป่วย) — ว่าง = ใช้ข้อมูลตัวอย่าง</label><input id="s1" value="${esc(s.hisPullUrl)}">
+ <label style="margin-top:8px">HIS result URL (POST JSON ผลอนุมัติ) — ว่าง = จำลอง</label><input id="s2" value="${esc(s.hisResultUrl)}">
+ <label style="margin-top:8px">AI endpoint (POST {kind,...} คืน {text}) — ว่าง = ปิด</label><input id="s3" value="${esc(s.aiEndpoint)}"></div></div>
+ <button data-act="saveSet">บันทึกการตั้งค่า</button> <button class="bad" data-act="export">ส่งออกข้อมูลทั้งหมด (JSON)</button></div>
+ <div class="note">ต้นแบบนี้เก็บข้อมูลในเบราว์เซอร์เครื่องนี้ (IndexedDB) เท่านั้น — ระบบจริงต้องมี server, ฐานข้อมูล, การยืนยันตัวตน และ audit log ตามนโยบาย PDPA ของโรงพยาบาล</div>`}
+
+/* ============ พิมพ์ ============ */
+function stk(inner,qr,bar){return `<div class="stk"><img data-qr="${esc(qr)}" alt="">${inner}${bar?`<svg data-bar="${esc(bar)}" style="width:100%"></svg>`:''}</div>`}
+function doPrint(html){$('#print').innerHTML=html;hydrate();setTimeout(()=>window.print(),300)}
+
+/* ============ Actions ============ */
+const A={
+ rq(el){RQ=el.dataset.v;render()},
+ ffrom(el){F.from=el.value;render()},fto(el){F.to=el.value;render()},
+ frange(el){const v=el.dataset.v,t=new Date();F.to=v==='all'?'':isoDay(t);F.from=v==='today'?isoDay(t):v==='7'?isoDay(t-6*864e5):v==='month'?isoDay(new Date(t.getFullYear(),t.getMonth(),1)):'';render()},
+ fillerDoc(el){const f=el.form;f.filler.disabled=el.checked;f.filler.required=!el.checked;if(el.checked)f.filler.value='';else f.filler.focus()},
+ logout(){db.session=null;W.ph='';save();if(location.hash==='#/login')render();else go('#/login')},
+ zoom(el){const lb=$('#lb');$('img',lb).src=el.src;lb.style.display='flex'},
+ fst(el){F.step='';F.st=F.st===el.dataset.v?'':el.dataset.v;render()},
+ fstep(el){const on=F.step===el.dataset.v;F.st=on?'':'processing';F.step=on?'':el.dataset.v;render()},
+ fstsel(el){F.step='';F.st=el.value;render()},
+ q(el){F.q=el.value;const p=el.selectionStart;render();const n=$('[data-act=q]');n.focus();n.setSelectionRange(p,p)},
+ wq(el){W.q=el.value;const p=el.selectionStart;render();const n=$('[data-act=wq]');n.focus();n.setSelectionRange(p,p)},
+ wph(el){W.ph=el.value;render()},wst(el){W.st=el.value;render()},wgrp(el){W.grp=el.checked;render()},
+ dob(el){const f=el.form;if(el.value){const a=Math.floor((Date.now()-new Date(el.value))/31557600000);f.age.value=a}},
+ addSite(){const n=$$('#sites .row').length+1;$('#sites').insertAdjacentHTML('beforeend',`<div class="row" style="margin-bottom:4px"><span>${n}.</span><input name="site" style="flex:1"></div>`)},
+ async pull(){const hn=$('#pullhn').value.trim(),m=$('#pullmsg');let d;
+   try{d=db.settings.hisPullUrl?await (await fetch(db.settings.hisPullUrl+(db.settings.hisPullUrl.includes('?')?'&':'?')+'hn='+encodeURIComponent(hn))).json():DEMO_HIS.find(x=>x.hn===hn)}catch(e){m.textContent='เชื่อมต่อ HIS ไม่ได้: '+e.message;return}
+   if(!d){m.textContent='ไม่พบ HN นี้';return}
+   const f=$('#frm');Object.entries(d).forEach(([k,v])=>{if(f[k]&&f[k].type!=='radio')f[k].value=v});f.hn.value=d.hn;if(d.dob){f.age.value=Math.floor((Date.now()-new Date(d.dob))/31557600000)}
+   f.source.value='HIS';m.textContent='ดึงข้อมูลแล้ว'+(db.settings.hisPullUrl?'':' (ข้อมูลตัวอย่าง — ยังไม่ได้ตั้ง HIS URL)')},
+ async ocr(){const [img]=await pickFiles(false);if(!img)return;const m=$('#ocrmsg');m.textContent='กำลังโหลด OCR (ครั้งแรกใช้เวลาสักครู่)…';
+   try{if(!window.Tesseract)await new Promise((r,j)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});
+    const {data}=await Tesseract.recognize(img,'tha+eng');const t=data.text,f=$('#frm');
+    const hn=t.match(/HN[:\s.]*([0-9\/-]{5,12})/i);if(hn)f.hn.value=hn[1];
+    const nm=t.match(/(?:ชื่อ|Name)[-:\s.]*([^\s]+)\s+([^\s]+)/);if(nm){f.fname.value=nm[1];f.lname.value=nm[2]}
+    f.history.value=(f.history.value+'\n[OCR]\n'+t).trim();f.source.value='manual';m.textContent='อ่านแล้ว — ตรวจสอบ/แก้ไขข้อมูลที่ช่องต่างๆ (ข้อความเต็มต่อท้ายช่องประวัติ)'}
+   catch(e){m.textContent='OCR ไม่สำเร็จ (ต้องต่ออินเทอร์เน็ต): '+e}},
+ async addPhoto(el){const l=await pickFiles();const c=cur();const p=el.dataset.path;let a=getPath(c,p);if(!a){setPath(c,p,[]);a=getPath(c,p)}a.push(...l);log(c,'เพิ่มรูป '+l.length+' รูป');render()},
+ delPhoto(el){const c=cur();getPath(c,el.dataset.path).splice(+el.dataset.i,1);save();render()},
+ register(){const c=cur();
+   if(!c.pathologist)return alert('กรุณาเลือกพยาธิแพทย์ผู้รับผิดชอบ');
+   const miss=c.containers.filter(ct=>!(ct.photos||[]).length);if(miss.length)return alert('ต้องถ่ายรูปอย่างน้อย 1 รูปต่อภาชนะ: '+miss.map(ctLabel).join(', '));
+   const y=yy();db.seq[y]=(db.seq[y]||0)+1;db.lab[y]=(db.lab[y]||0)+1;c.sNo=`S${y}-${pad(db.seq[y],5)}`;c.labNo=`LAB${y}-${pad(db.lab[y],6)}`;c.status='registered';c.regAt=now();log(c,`ลงทะเบียน ${c.sNo} / ${c.labNo}`);render()},
+ printCt(el){const c=cur(),ct=c.containers[+el.dataset.i];doPrint(stk(`<div><b>${esc(ctFull(c,ct))}</b><br>${esc(cname(c))}<br>HN ${esc(c.patient.hn)}<br>${esc(c.labNo)}</div>`,ctFull(c,ct),c.labNo))},
+ async aiGross(el){const c=cur(),i=+el.dataset.i,ct=c.containers[i];if(!(ct.gPhotos||[]).length)return alert('ถ่ายรูปชิ้นเนื้อพร้อมมาตรวัดก่อน');
+   el.textContent='กำลังวิเคราะห์…';const g=ct.g||(ct.g={});
+   let text=null;try{text=await AI.call('gross',{images:ct.gPhotos,context:c.req})}catch(e){}
+   if(text)ct.gross=text;else{let tot=0,col='';for(const p of ct.gPhotos){const a=await analyzeImage(p);tot+=a.pieces;col=col||a.color}g.pieces=tot||g.pieces;g.color=g.color||col;ct.gross=composeGross(g)}
+   save();render()},
+ compGross(el){const ct=cur().containers[+el.dataset.i];ct.gross=composeGross(ct.g||{});save();render()},
+ mkBlocks(){const c=cur(),n=+$('#bn').value||1,s=($('#bl').value||'A').toUpperCase().charCodeAt(0),col=$('#bc').value;let made=[];
+   for(let k=0;k<n;k++){const L=String.fromCharCode(s+k);if(c.blocks.some(b=>b.letter===L))return alert('มีบล็อก '+L+' อยู่แล้ว');c.blocks.push({letter:L,color:col,ct:0,pieces:1,step:'grossing',steps:[{step:'grossing',ts:now(),by:who()}]});made.push(L)}
+   log(c,'สร้างบล็อก '+made.join(','));refresh(c);render()},
+ delBlock(el){const c=cur();c.blocks.splice(+el.dataset.i,1);refresh(c);save();render()},
+ printBlocks(){const c=cur(),bl=c.blocks;const sum=stk(`<div><b>${esc(c.sNo)}</b><br><span style="font-size:10px">${esc(cname(c))} · HN ${esc(c.patient.hn)}</span><div class="nw" style="line-height:1"><b style="font-size:34px">${bl.length}</b> <b style="font-size:15px">Block</b></div><b class="nw" style="font-size:17px">(${bl.length>1?bl[0].letter+'-'+bl.at(-1).letter:bl[0].letter})</b><br><span style="font-size:10px">${esc(c.labNo)}</span></div>`,c.sNo);
+   doPrint(sum+bl.map(b=>stk(`<div><b>${esc(c.sNo+'-'+b.letter)}</b><br>${esc(c.containers[b.ct]?ctLabel(c.containers[b.ct]):'')} · ${b.pieces||1} ชิ้น<br>สี${esc(b.color)}<br>HN ${esc(c.patient.hn)}</div>`,c.sNo+'-'+b.letter)).join(''))},
+ scanCam(){Cam.open((q,img)=>{scanPhoto=img;$('#sph').innerHTML=`<img class="th" src="${img}">`;$('#sqr').value=q;$('#smsg').innerHTML=`<div class="ok">สแกน QR ได้: ${esc(q)} — ตรวจขั้นตอนแล้วกด “บันทึกขั้นตอน”</div>`})},
+ async scanPhoto(){const [p]=await pickFiles(false);if(!p)return;scanPhoto=p;$('#sph').innerHTML=`<img class="th" src="${p}">`;const q=await decodeQR(p);if(q){$('#sqr').value=q;$('#smsg').innerHTML=`<div class="ok">อ่าน QR ได้: ${esc(q)}</div>`}else $('#smsg').innerHTML='<div class="note">อ่าน QR จากรูปไม่ได้ — ถ่ายใหม่ให้ QR ชัดและเต็มกรอบมากขึ้น หรือพิมพ์รหัสเอง</div>'},
+ scanSave(){const code=$('#sqr').value.trim().toUpperCase(),step=$('#sst').value,m=$('#smsg');
+   if(!code)return m.innerHTML='<div class="note">ไม่มีรหัส</div>';if(!scanPhoto)return m.innerHTML='<div class="note">ต้องถ่ายรูปงานคู่กับ QR ก่อนบันทึก</div>';
+   const mm=code.match(/^(S\d{2}-\d{5})(?:-([A-Z]))?$/);const c=mm&&db.cases.find(x=>x.sNo===mm[1]);if(!c)return m.innerHTML='<div class="note">ไม่พบเคสตามรหัสนี้</div>';
+   const bs=c.blocks.filter(b=>!mm[2]||b.letter===mm[2]);if(!bs.length)return m.innerHTML='<div class="note">ไม่พบบล็อก</div>';
+   bs.forEach(b=>{b.steps.push({step,ts:now(),by:who(),photo:scanPhoto});b.step=step});
+   log(c,`${stepName(step)} — ${bs.map(b=>b.letter).join(',')}`,{photo:scanPhoto});refresh(c);save();scanPhoto='';$('#sph').innerHTML='';$('#sqr').value='';
+   m.innerHTML=`<div class="ok">บันทึกแล้ว: ${esc(c.sNo)} บล็อก ${bs.map(b=>b.letter).join(', ')} → ${esc(stepName(step))} (สถานะเคส: ${STATUS[c.status]})</div>`},
+ startRead(){const c=cur();if(!canAct(c))return alert('เฉพาะแพทย์ที่ได้รับมอบหมายหรือได้รับปรึกษาเท่านั้น');c.reading=true;c.status='reading';log(c,'แพทย์เริ่มอ่านเคส');render()},
+ order(){const c=cur();if(!canAct(c))return alert('เฉพาะแพทย์ที่ได้รับมอบหมายหรือได้รับปรึกษาเท่านั้น');const kind=$('#ok').value;c.orders.push({id:uid(),block:$('#ob').value,kind,name:kind==='recut'?'Recut':$('#on1').value,note:$('#on2').value,status:'ordered',by:db.session?.name||db.user||c.pathologist||'—',ts:now()});log(c,'สั่งงานเพิ่ม: '+kind);render()},
+ orderDone(el){const c=getCase(el.dataset.c),o=c.orders.find(x=>x.id===el.dataset.o);o.status='done';log(c,'งานเพิ่มเสร็จ: '+o.name);render()},
+ tpl(){const c=cur(),t=TPL[$('#tpl').value];Object.assign(c.report,t);save();render()},
+ async aiDraft(){const c=cur(),r=c.report;let t=null;try{t=await AI.call('report',{case:payload(c),images:c.containers.flatMap(x=>x.gPhotos||[])})}catch(e){}
+   if(t)r.micro=t;else{r.micro=(r.micro?r.micro+'\n':'')+`[ร่าง — ยังไม่ได้เชื่อม AI endpoint] Gross: ${c.containers.map(ct=>ct.gross).filter(Boolean).join(' ')} Clinical: ${c.req.history||'-'}; provisional: ${c.req.provisional||'-'}. โปรดเขียนผลการอ่านสไลด์`}save();render()},
+ async aiSlide(){const c=cur(),r=c.report;if(!(r.slides||[]).length)return alert('เพิ่มรูป slide ก่อน');let t=null;try{t=await AI.call('slide',{images:r.slides,context:c.req})}catch(e){}
+   if(!t)return alert('ยังไม่ได้ตั้งค่า AI endpoint (ตั้งค่า → AI endpoint) — การวินิจฉัยจากภาพต้องใช้โมเดลที่ได้รับการตรวจสอบทางคลินิก และแพทย์ต้องยืนยันเสมอ');r.dx=(r.dx?r.dx+'\n':'')+t;save();render()},
+ aiReview(){const c=cur(),r=c.report,n=[];const dx=(r.dx||'').toLowerCase();
+   if(!dx.trim())n.push('ยังไม่ได้ระบุ Diagnosis');if(!(r.micro||'').trim())n.push('ยังไม่มี Microscopic description');
+   const siteOK=c.req.sites.some(s=>s&&dx.includes(s.toLowerCase().split(/[\s,]/)[0]));if(c.req.sites.some(Boolean)&&!siteOK)n.push('Diagnosis ไม่ได้ระบุชื่ออวัยวะ/ตำแหน่งตามใบคำขอ ('+c.req.sites.filter(Boolean).join(', ')+')');
+   if(/carcinoma|malignan|lymphoma|sarcoma/.test(dx)&&!/grade|margin|stage|invasion|lvi|pni/.test(dx+' '+(r.comment||'').toLowerCase()))n.push('พบคำว่า malignancy — ควรระบุ grade / margin / invasion / LVI ตามความเหมาะสม');
+   if(c.req.provisional&&dx&&!dx.includes(c.req.provisional.toLowerCase().split(' ')[0]))n.push('Diagnosis ต่างจาก Provisional ('+c.req.provisional+') — ตรวจสอบและพิจารณาใส่ comment');
+   if(c.req.hiv==='pos')n.push('ผู้ป่วย HIV positive — ตรวจสอบ AFB/GMS/IHC ที่เกี่ยวข้องกับ opportunistic infection');
+   if(pendingOrders(c).length)n.push('ยังมีงานเพิ่มค้างอยู่');if(!c.blocks.length)n.push('เคสไม่มีบล็อก');
+   r.aiNotes=n.length?n:['ไม่พบประเด็นจากการตรวจเบื้องต้น (ตรวจตามกฎอย่างง่าย — แพทย์ต้องทบทวนเอง)'];save();render()},
+ consult(){const c=cur(),to=$('#ct').value,msg=$('#cm').value.trim();if(!to||!msg)return alert('เลือกแพทย์และพิมพ์ข้อความ');(c.consults??=[]).push({from:c.pathologist||db.user,to,msg,ts:now()});log(c,'ส่งปรึกษา '+to);render()},
+ reply(el){const c=cur(),k=c.consults[+el.dataset.i],v=$('#rp'+el.dataset.i).value.trim();if(!v)return;k.reply=v;k.rts=now();log(c,'ผลปรึกษาจาก '+k.to);render()},
+ sign(){const c=cur(),who=db.session?.name;if(!who)return alert('ต้องเข้าสู่ระบบแพทย์ก่อน');if(!(c.report.dx||'').trim())return alert('ต้องมี Diagnosis');
+   if(!confirm('ยืนยันลงนามอนุมัติผลโดย '+who+'?'))return;c.report.signedBy=who;c.report.signedAt=now();c.status='signed';log(c,'อนุมัติผล โดย '+who);render()},
+ printRep(){const c=cur(),r=c.report||{};doPrint(`<div class="rep"><h1>โรงพยาบาลพุทธชินราช พิษณุโลก<br>รายงานผลทางพยาธิวิทยา (Surgical Pathology Report)</h1>
+   <p><b>${esc(c.sNo||'')}</b> · ${esc(c.labNo||'')} &nbsp; ชื่อ ${esc(cname(c))} · HN ${esc(c.patient.hn)} · อายุ ${c.patient.age||'?'} ปี · ${esc(c.patient.ward||'')}</p>
+   <p>สิ่งส่งตรวจ: ${c.containers.map(ct=>esc(ctLabel(ct)+': '+ct.site)).join('; ')}</p><h4>Clinical</h4><p>${esc(c.req.history)}</p>
+   <h4>Gross</h4><p>${c.containers.map(ct=>esc(ct.gross||'')).join('\n')}</p><h4>Diagnosis</h4><p><b>${esc(r.dx)}</b></p><h4>Microscopic</h4><p>${esc(r.micro)}</p><h4>Comment</h4><p>${esc(r.comment)}</p>
+   <p style="margin-top:14px">${r.signedBy?`ลงนาม: ${esc(r.signedBy)} · ${fmtT(r.signedAt)}`:'<i>(ยังไม่อนุมัติ — ร่างรายงาน)</i>'}</p></div>`)},
+ async send(){const c=cur(),ch=[];if($('#chH').checked)ch.push('HIS (HOSxP)');if($('#chM').checked)ch.push('หมอพร้อม');if(!ch.length)return;
+   let mode='sim';if(db.settings.hisResultUrl){try{const r=await fetch(db.settings.hisResultUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload(c),channels:ch})});if(!r.ok)throw new Error(r.status);mode='http'}catch(e){return alert('ส่งไม่สำเร็จ: '+e.message)}}
+   c.sent={ts:now(),channels:ch,mode};c.status='sent';log(c,'ส่งผลเข้า '+ch.join(', '));render()},
+ dlJson(){const c=cur();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload(c),null,2)],{type:'application/json'}));a.download=(c.sNo||'result')+'.json';a.click()},
+ saveSet(){const s=db.settings;s.doctors=$('#sp').value.split('\n').map(x=>x.trim().match(/^(\d{13})\s+(.+)$/)).filter(Boolean).map(m=>({id:m[1],name:m[2].trim()}));s.hisPullUrl=$('#s1').value.trim();s.hisResultUrl=$('#s2').value.trim();s.aiEndpoint=$('#s3').value.trim();save();alert('บันทึกแล้ว')},
+ export(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='patholis-backup.json';a.click()}
+};
+
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');const a=e.target.closest('[data-act]');
+  if(a&&!['INPUT','SELECT'].includes(a.tagName)){e.preventDefault();A[a.dataset.act]?.(a);return}
+  if(g)go(g.dataset.go);
+});
+document.addEventListener('change',e=>{const a=e.target.closest('[data-act]');if(a&&(a.tagName==='SELECT'||a.type==='checkbox'||a.type==='date'))A[a.dataset.act]?.(a)});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset.act&&t.tagName==='INPUT'&&t.type!=='checkbox'&&['q','wq'].includes(t.dataset.act))A[t.dataset.act](t);
+  if(t.dataset.bind){const c=cur();if(!c)return;let v=t.value;if(t.dataset.num)v=+v;setPath(c,t.dataset.bind,v);save()}});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.bind&&t.dataset.num){render()}});
+window.addEventListener('hashchange',()=>Cam.close());
+$('#lb').onclick=()=>$('#lb').style.display='none';
+$('#user').oninput=e=>{db.user=e.target.value;save()};
+document.addEventListener('submit',e=>{if(e.target.id==='lgn'){e.preventDefault();const f=e.target,d=db.settings.doctors.find(x=>x.id===f.cid.value.trim());if(!d||f.pw.value!==DEMO_PASSWORD){const m=$('#lgmsg');m.style.display='block';m.textContent='เลข 13 หลักหรือรหัสผ่านไม่ถูกต้อง';return}db.session={id:d.id,name:d.name};W.ph=d.name;save();if(location.hash==='#/worklist')render();else go('#/worklist');return}
+  if(e.target.id!=='frm')return;e.preventDefault();
+  const f=e.target,v=n=>f[n].value.trim(),sites=$$('[name=site]',f).map(x=>x.value.trim()).filter(Boolean);
+  let bags=+v('bags')||0,bot=+v('bottles')||0;if(bags<0||bot<0||(!bags&&!bot))return alert('ต้องระบุจำนวนภาชนะ (ถุง หรือ ขวด) อย่างน้อยหนึ่งอย่าง');
+  const fillIsDoc=f.fillerIsDoc.checked;if(!fillIsDoc&&!v('filler'))return alert('กรุณาระบุชื่อผู้กรอกใบคำขอ');
+  const containers=[];for(let i=1;i<=bot;i++)containers.push({type:'ขวด',n:i,site:sites[i-1]||'',photos:[],gPhotos:[],g:{},gross:''});for(let i=1;i<=bags;i++)containers.push({type:'ถุง',n:i,site:sites[bot+i-1]||'',photos:[],gPhotos:[],g:{},gross:''});
+  const type=v('type')==='อื่นๆ'&&v('typeOther')?v('typeOther'):v('type'),proc=f.proc.value==='Other'&&v('procOther')?v('procOther'):f.proc.value;
+  const c={id:uid(),createdAt:now(),status:'draft',source:f.source.value,pathologist:'',
+    patient:{hn:v('hn'),fname:v('fname'),lname:v('lname'),dob:f.dob.value,age:v('age'),sex:f.sex.value,hospital:v('hospital'),ward:v('ward'),doctor:v('doctor')},
+    req:{type,proc,sites,hiv:f.hiv.value,filler:{isDoctor:fillIsDoc,name:fillIsDoc?v('doctor'):v('filler')},history:v('history'),exam:v('exam'),radiology:v('radiology'),prevPatho:v('prevPatho'),provisional:v('provisional')},
+    containers,blocks:[],orders:[],events:[],consults:[],report:{}};
+  db.cases.push(c);log(c,'รับใบคำขอ ('+(c.source==='HIS'?'HIS':'กรอกเอง')+')');go('#/request')});
+window.addEventListener('hashchange',render);
+
+(async()=>{let d;try{d=await idb.get('db')}catch(e){console.warn('IndexedDB ใช้ไม่ได้ — ข้อมูลอยู่ในหน่วยความจำชั่วคราว')}if(d){db=d;db.settings={...{hisPullUrl:'',hisResultUrl:'',aiEndpoint:'',doctors:DOCTORS},...db.settings};if(!db.settings.doctors?.length||typeof db.settings.doctors[0]==='string')db.settings.doctors=DOCTORS}$('#user').value=db.user||'';render()})();
+</script>
+</body>
+</html>
