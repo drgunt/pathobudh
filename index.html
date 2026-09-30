@@ -421,7 +421,7 @@ function vRepQ(){const l=db.cases.filter(c=>['ready','reading','signed','sent'].
 function vHis(){const l=db.cases.filter(c=>['signed','sent'].includes(c.status));
   return `<h2>8) ส่ง HIS / หมอพร้อม</h2><div class="card"><table><tr><th>S number</th><th>HN</th><th>ชื่อ</th><th>อนุมัติ</th><th>สถานะ</th></tr>${l.map(c=>`<tr class="click" data-go="#/case/${c.id}/his"><td><b>${esc(c.sNo)}</b></td><td>${esc(c.patient.hn)}</td><td>${esc(cname(c))}</td><td>${fmtT(c.report.signedAt)}</td><td>${chip(c.status)}</td></tr>`).join('')||'<tr><td class="mute">ยังไม่มีผลที่อนุมัติ</td></tr>'}</table></div>`}
 function vSet(){const s=db.settings;return `<h2>ตั้งค่า</h2><div class="card"><div class="grid g2">
- <div><label>รายชื่อแพทย์ (บรรทัดละคน: เลข 13 หลัก เว้นวรรค ชื่อ) — ใช้เลข 13 หลักล็อกอิน</label><textarea id="sp" style="min-height:150px">${esc(s.doctors.map(d=>d.id+' '+d.name).join('\n'))}</textarea></div>
+
  <div><label>HIS pull URL (GET ?hn=xxx คืน JSON ผู้ป่วย) — ว่าง = ใช้ข้อมูลตัวอย่าง</label><input id="s1" value="${esc(s.hisPullUrl)}">
  <label style="margin-top:8px">HIS result URL (POST JSON ผลอนุมัติ) — ว่าง = จำลอง</label><input id="s2" value="${esc(s.hisResultUrl)}">
  <label style="margin-top:8px">AI endpoint (POST {kind,...} คืน {text}) — ว่าง = ปิด</label><input id="s3" value="${esc(s.aiEndpoint)}"></div></div>
@@ -517,7 +517,7 @@ const A={
    let mode='sim';if(db.settings.hisResultUrl){try{const r=await fetch(db.settings.hisResultUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload(c),channels:ch})});if(!r.ok)throw new Error(r.status);mode='http'}catch(e){return alert('ส่งไม่สำเร็จ: '+e.message)}}
    c.sent={ts:now(),channels:ch,mode};c.status='sent';log(c,'ส่งผลเข้า '+ch.join(', '));render()},
  dlJson(){const c=cur();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload(c),null,2)],{type:'application/json'}));a.download=(c.sNo||'result')+'.json';a.click()},
- saveSet(){const s=db.settings;s.doctors=$('#sp').value.split('\n').map(x=>x.trim().match(/^(\d{13})\s+(.+)$/)).filter(Boolean).map(m=>({id:m[1],name:m[2].trim()}));s.hisPullUrl=$('#s1').value.trim();s.hisResultUrl=$('#s2').value.trim();s.aiEndpoint=$('#s3').value.trim();save();alert('บันทึกแล้ว')},
+ saveSet(){const s=db.settings;s.hisPullUrl=$('#s1').value.trim();s.hisResultUrl=$('#s2').value.trim();s.aiEndpoint=$('#s3').value.trim();save();alert('บันทึกแล้ว')},
  export(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='patholis-backup.json';a.click()}
 };
 
@@ -547,7 +547,7 @@ document.addEventListener('submit',e=>{if(e.target.id==='lgn'){e.preventDefault(
   db.cases.push(c);log(c,'รับใบคำขอ ('+(c.source==='HIS'?'HIS':'กรอกเอง')+')');go('#/request')});
 window.addEventListener('hashchange',render);
 
-(async()=>{let d;try{d=await idb.get('db')}catch(e){console.warn('IndexedDB ใช้ไม่ได้ — ข้อมูลอยู่ในหน่วยความจำชั่วคราว')}if(d){db=d;db.settings={...{hisPullUrl:'',hisResultUrl:'',aiEndpoint:'',doctors:DOCTORS},...db.settings};if(!db.settings.doctors?.length||typeof db.settings.doctors[0]==='string')db.settings.doctors=DOCTORS}$('#user').value=db.user||'';render()})();
+(async()=>{let d;try{d=await idb.get('db')}catch(e){console.warn('IndexedDB ใช้ไม่ได้ — ข้อมูลอยู่ในหน่วยความจำชั่วคราว')}if(d){db=d;db.settings={...{hisPullUrl:'',hisResultUrl:'',aiEndpoint:'',doctors:DOCTORS},...db.settings};db.settings.doctors=DOCTORS}$('#user').value=db.user||'';render()})();
 </script>
 </body>
 </html>
